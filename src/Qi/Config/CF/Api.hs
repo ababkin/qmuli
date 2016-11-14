@@ -139,7 +139,7 @@ toResources config = Resources $ foldMap toStagedApiResources $ getAllApis confi
                         responseTemplates = [ (jsonContentType, "") ]
                         responseParams = [
                             ("method.response.header.Access-Control-Allow-Headers", "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'")
-                          , ("method.response.header.Access-Control-Allow-Methods", "'POST,OPTIONS'")
+                          , ("method.response.header.Access-Control-Allow-Methods", "'*'")
                           , ("method.response.header.Access-Control-Allow-Origin", "'*'")
                           ]
 
@@ -163,6 +163,15 @@ toResources config = Resources $ foldMap toStagedApiResources $ getAllApis confi
                 name = getApiMethodCFResourceName apir _verb
                 verb = Literal . T.pack $ show _verb
                 methodResponse = apiGatewayMethodResponse "200"
+                  & agmrResponseParameters ?~ responseParams
+
+                  where
+                    responseParams = [
+                        ("method.response.header.Access-Control-Allow-Headers", Bool False)
+                      , ("method.response.header.Access-Control-Allow-Methods", Bool False)
+                      , ("method.response.header.Access-Control-Allow-Origin", Bool False)
+                      ]
+
                 lbdResName = getLambdaResourceNameFromId _lbdId config
                 lbdPermResName = getLambdaPermissionResourceName $ getLambdaById _lbdId config
 
@@ -198,10 +207,15 @@ toResources config = Resources $ foldMap toStagedApiResources $ getAllApis confi
                     integrationResponse = apiGatewayIntegrationResponse
                       & agirResponseTemplates ?~ responseTemplates
                       & agirStatusCode ?~ "200"
+                      & agirResponseParameters ?~ responseParams
 
                       where
                         responseTemplates = [ (jsonContentType, "$input.json('$.body')") ]
-
+                        responseParams = [
+                            ("method.response.header.Access-Control-Allow-Headers", "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'")
+                          , ("method.response.header.Access-Control-Allow-Methods", "'*'")
+                          , ("method.response.header.Access-Control-Allow-Origin", "'*'")
+                          ]
 
 
 

@@ -19,6 +19,8 @@ import           Qi.Config.AWS.Api.Accessors
 import           Qi.Config.AWS.DDB
 import           Qi.Config.AWS.DDB.Accessors
 import           Qi.Config.AWS.Lambda
+import           Qi.Config.AWS.RDS
+import           Qi.Config.AWS.RDS.Accessors
 import           Qi.Config.AWS.S3
 import           Qi.Config.AWS.S3.Accessors
 import           Qi.Config.Identifier
@@ -38,6 +40,9 @@ interpret program =  do
 
     (RDdbTable name hashAttrDef rangeAttrDef provCap) :>>= is -> do
       interpret . is =<< rDdbTable name hashAttrDef rangeAttrDef provCap
+
+    (RRdsDbInstance name instanceType size) :>>= is -> do
+      interpret . is =<< rdsDbInstance name instanceType size
 
     (RApi name) :>>= is -> do
       interpret . is =<< rApi name
@@ -74,7 +79,6 @@ interpret program =  do
       lbdConfig.lcLambdas %= SHM.insert newLambdaId newLambda
       return newLambdaId
 
-
     rDdbTable name hashAttrDef rangeAttrDef provCap = do
       let newDdbTable = DdbTable {
           _dtName         = name
@@ -86,6 +90,18 @@ interpret program =  do
 
       ddbConfig %= ddbConfigModifier
       return newDdbTableId
+
+
+    rdsDbInstance name instanceType size = do
+      let newRdsDbInstance = RdsDbInstance {
+          _rdiName  = name
+        , _rdiType  = instanceType
+        , _rdiSize  = size
+        }
+          (newRdsDbInstanceId, rdsConfigModifier) = insertRdsDbInstance newRdsDbInstance
+
+      rdsConfig %= rdsConfigModifier
+      return newRdsDbInstanceId
 
 
     rApi name = do

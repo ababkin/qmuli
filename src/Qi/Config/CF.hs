@@ -15,6 +15,7 @@ import           Qi.Config.AWS
 import qualified Qi.Config.CF.Api     as Api
 import qualified Qi.Config.CF.DDB     as DDB
 import qualified Qi.Config.CF.Lambda  as Lambda
+import qualified Qi.Config.CF.RDS     as RDS
 import qualified Qi.Config.CF.Role    as Role
 import qualified Qi.Config.CF.S3      as S3
 
@@ -37,6 +38,7 @@ toResources config = mconcat [
     , Lambda.toResources config
     , Api.toResources config
     , DDB.toResources config
+    , RDS.toResources config
     ]
 
 

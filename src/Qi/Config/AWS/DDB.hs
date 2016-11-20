@@ -25,22 +25,19 @@ data DdbAttrType = S | N | B
 data DdbAttrDef = DdbAttrDef {
     _daName :: Text
   , _daType :: DdbAttrType
-  }
-  deriving Show
+  } deriving Show
 
 data DdbProvCap = DdbProvCap {
     _dpcRead  :: Integer
   , _dpcWrite :: Integer
-  }
-  deriving Show
+  } deriving Show
 
 data DdbTable = DdbTable {
     _dtName         :: Text
   , _dtHashAttrDef  :: DdbAttrDef
   , _dtRangeAttrDef :: Maybe DdbAttrDef
   , _dtProvCap      :: DdbProvCap
-  }
-  deriving Show
+  } deriving Show
 
 instance Hashable DdbTable where
   hashWithSalt s DdbTable{_dtName} = s `hashWithSalt` _dtName

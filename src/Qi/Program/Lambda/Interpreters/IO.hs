@@ -22,6 +22,7 @@ import           Data.Text                    (Text)
 import qualified Data.Text                    as T
 import           Data.Text.Encoding           (decodeUtf8)
 import qualified Data.Text.IO                 as T
+import           Database.Groundhog.Sqlite
 import           Network.AWS                  hiding (send)
 import           Network.AWS.DynamoDB         as A
 import qualified Network.AWS.S3               as A
@@ -65,6 +66,9 @@ run program config = do
 
         (PutDdbRecord ddbTableId item) :>>= is -> do
           interpret . is =<< putDdbRecord ddbTableId item
+
+        (Transactions txs) :>>= is -> do
+          interpret . is =<< transactions txs
 
         (Output content) :>>= is -> do
           output content -- final output, no more program instructions
@@ -146,4 +150,13 @@ run program config = do
 
           where
             tableName = (getDdbTableById ddbTableId config)^.dtName
+
+-- RDS
+
+        transactions
+          :: ReaderT Sqlite IO ()
+          -> QiAWS ()
+        transactions txs = do
+          config <- lift ask
+          liftIO . withSqliteConn ":memory:" $ runDbConn txs
 

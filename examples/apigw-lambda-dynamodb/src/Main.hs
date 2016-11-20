@@ -26,7 +26,7 @@ import qualified Qi.Program.Config.Interface as CI
 import           Qi.Program.Lambda.Interface (LambdaProgram, getDdbRecord,
                                               output, putDdbRecord)
 
--- Used the two curl commands below to test-drive the two endpoints (substitute your unique api stage url first):
+-- Use the two curl commands below to test-drive the two endpoints (substitute your unique api stage url first):
 --
 -- curl -v -X POST -H "Content-Type: application/json" -d "{\"S\": \"hello there\"}" "https://2gezp5kxjb.execute-api.us-east-1.amazonaws.com/v1/things/xyz"
 -- curl -v -X GET "https://2gezp5kxjb.execute-api.us-east-1.amazonaws.com/v1/things/xyz"

@@ -1,0 +1,9 @@
+{"L": [
+    {"M": {
+            "firstName": {"S": "Vasya"},
+            "lastName": {"S": "Pupkin"},
+            "dateAdded": {"S": "01/01/2000"}
+        }
+    }
+    ]
+}

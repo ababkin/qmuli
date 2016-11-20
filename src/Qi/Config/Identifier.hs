@@ -24,3 +24,7 @@ instance Hashable ApiResourceId where
 newtype DdbTableId = DdbTableId Int deriving (Eq, Show)
 instance Hashable DdbTableId where
   s `hashWithSalt` (DdbTableId identifierHash) = s `hashWithSalt` identifierHash
+
+newtype RdsDbInstanceId = RdsDbInstanceId Int deriving (Eq, Show)
+instance Hashable RdsDbInstanceId where
+  s `hashWithSalt` (RdsDbInstanceId identifierHash) = s `hashWithSalt` identifierHash

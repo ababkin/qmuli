@@ -6,10 +6,12 @@
 module Qi.Program.Lambda.Interface where
 
 import           Control.Monad.Operational    (Program, singleton)
+import           Control.Monad.Trans.Reader   (ReaderT)
 import           Control.Monad.Trans.Resource (ResourceT)
 import qualified Data.ByteString              as BS
 import qualified Data.ByteString.Lazy         as LBS
 import           Data.Text                    (Text)
+import           Database.Groundhog.Sqlite
 import           Qi.Config.Identifier         (DdbTableId)
 
 import           Qi.Config.AWS.Api
@@ -45,6 +47,10 @@ data LambdaInstruction a where
     -> DdbAttrs
     -> LambdaInstruction ()
 
+  Transactions
+    :: ReaderT Sqlite IO ()
+    -> LambdaInstruction ()
+
   Output
     :: BS.ByteString
     -> LambdaInstruction ()
@@ -72,6 +78,11 @@ putDdbRecord
   -> DdbAttrs
   -> LambdaProgram ()
 putDdbRecord ddbTableId = singleton . PutDdbRecord ddbTableId
+
+transactions
+  :: ReaderT Sqlite IO ()
+  -> LambdaProgram ()
+transactions = singleton . Transactions
 
 output
   :: BS.ByteString

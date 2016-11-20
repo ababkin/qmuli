@@ -13,6 +13,7 @@ import           Data.Text                   (Text)
 import           Qi.Config.AWS               (Config)
 import           Qi.Config.AWS.Api
 import           Qi.Config.AWS.DDB
+import           Qi.Config.AWS.RDS
 import           Qi.Config.AWS.S3
 import           Qi.Config.Identifier
 import           Qi.Program.Lambda.Interface (LambdaProgram)
@@ -37,6 +38,12 @@ data ConfigInstruction a where
     -> Maybe DdbAttrDef
     -> DdbProvCap
     -> ConfigInstruction DdbTableId
+
+  RRdsDbInstance
+    :: Text
+    -> RdsInstanceType
+    -> Int
+    -> ConfigInstruction RdsDbInstanceId
 
   RApi
     :: Text
@@ -65,6 +72,8 @@ s3Bucket = singleton . RS3Bucket
 s3BucketLambda name s3BucketId = singleton . RS3BucketLambda name s3BucketId
 
 ddbTable name hashAttrDef rangeAttrDef = singleton . RDdbTable name hashAttrDef rangeAttrDef
+
+rdsDbInstance name instanceType = singleton . RRdsDbInstance name instanceType
 
 api = singleton . RApi
 

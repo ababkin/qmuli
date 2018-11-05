@@ -3,7 +3,7 @@
 {-# LANGUAGE TemplateHaskell   #-}
 
 module Qi.Config.AWS.ApiGw where
-
+{-
 import           Control.Lens
 import           Data.Aeson
 import           Data.Default                          (Default, def)
@@ -15,7 +15,7 @@ import qualified Data.Text                             as T
 import           Protolude
 
 import           Qi.Config.AWS.ApiGw.ApiMethod.Profile (ApiMethodProfile)
-import           Qi.Config.Identifier
+import           Qi.Config.Types
 
 
 data RequestParams = RequestParams {
@@ -37,14 +37,14 @@ data ApiMethodEvent = ApiMethodEvent {
   deriving (Eq, Show)
 
 
-type ApiAuthorizerDeps = HashMap ApiId [ApiAuthorizerId]
-type ApiResourceDeps = HashMap (Either ApiId ApiResourceId) [ApiResourceId]
+type ApiAuthorizerDeps = HashMap ApiId [ Id ApiAuthorizer ]
+type ApiResourceDeps = HashMap (Either ApiId ApiResourceId) [ Id ApiResource ]
 
 data ApiGwConfig = ApiGwConfig {
-    _acApis              :: HashMap ApiId Api
-  , _acApiResources      :: HashMap ApiResourceId ApiResource
+    _acApis              :: ResourceIdMap Api
+  , _acApiResources      :: ResourceIdMap ApiResource
   , _acApiResourceDeps   :: ApiResourceDeps
-  , _acApiAuthorizers    :: HashMap ApiAuthorizerId ApiAuthorizer
+  , _acApiAuthorizers    :: ResourceIdMap ApiAuthorizer
   , _acApiAuthorizerDeps :: ApiAuthorizerDeps
   }
   deriving (Eq, Show)
@@ -88,6 +88,7 @@ data ApiAuthorizer = ApiAuthorizer {
   }
   deriving (Eq, Show)
 
+
 data ApiResource = ApiResource {
     _arName          :: Text
   , _arParent        :: Either ApiId ApiResourceId
@@ -130,4 +131,4 @@ makeLenses ''ApiAuthorizer
 makeLenses ''ApiResource
 makeLenses ''ApiMethodEvent
 makeLenses ''RequestParams
-
+-}

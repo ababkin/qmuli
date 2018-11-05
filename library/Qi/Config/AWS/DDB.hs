@@ -3,7 +3,7 @@
 {-# LANGUAGE TemplateHaskell   #-}
 
 module Qi.Config.AWS.DDB where
-
+{-
 import           Control.Lens
 import           Data.Aeson
 import           Data.ByteString      (ByteString)
@@ -92,4 +92,4 @@ makeLenses ''DdbTable
 makeLenses ''DdbProvCap
 makeLenses ''DdbTableProfile
 makeLenses ''DdbConfig
-
+-}

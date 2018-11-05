@@ -20,21 +20,22 @@ import qualified Data.Text            as T
 import           GHC.Generics
 import           Protolude
 import           Qi.AWS.Types
-import           Qi.Config.Identifier
+import           Qi.Config.AWS.Lambda (Lambda)
+import           Qi.Config.Types
 
 
 data CfCustomResource = CfCustomResource {
-    _cLbdId :: LambdaId
+    _cLbdId :: Id Lambda
   }
   deriving (Eq, Show)
 
 instance Hashable CfCustomResource where
-  hashWithSalt s CfCustomResource{ _cLbdId = LambdaId lbdId } =
+  hashWithSalt s CfCustomResource{ _cLbdId = Id lbdId } =
     s `hashWithSalt` (show lbdId <> "custom" :: Text)
 
 
 data CfConfig = CfConfig {
-    _cfcCustomResources :: HashMap CfCustomResourceId CfCustomResource
+    _cfcCustomResources :: ResourceIdMap CfCustomResource
   }
   deriving (Eq, Show)
 

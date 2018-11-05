@@ -14,6 +14,7 @@ import           Data.HashMap.Strict  (HashMap)
 import qualified Data.HashMap.Strict  as SHM
 import           GHC.Show             (Show (..))
 import           Protolude
+import           Qi.Config.AWS.Lambda (LambdaId)
 import           Qi.Config.Identifier
 import           Qi.Config.Types
 
@@ -41,6 +42,8 @@ instance Default S3Bucket where
     , _s3bProfile      = def
     , _s3bEventConfigs = def
     }
+
+type S3BucketId = Id S3Bucket
 
 data S3BucketProfile = S3BucketProfile {
     _s3bpExistence    :: ResourceExistence

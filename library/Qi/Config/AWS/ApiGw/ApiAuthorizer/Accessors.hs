@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Qi.Config.AWS.ApiGw.ApiAuthorizer.Accessors where
-
+{-
 import           Control.Lens
 import           Data.Char            (isAlphaNum)
 import qualified Data.HashMap.Strict  as SHM
@@ -21,5 +21,5 @@ getChildren
 getChildren aid config =
   SHM.lookupDefault [] aid $ config^.apiGwConfig.acApiAuthorizerDeps
 
-
+-}
 

@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Qi.Config.AWS.ApiGw.ApiMethod.Profile where
-
+{-
 import           Control.Lens
 import           Data.Default         (Default, def)
 import           Protolude
@@ -20,4 +20,4 @@ instance Default ApiMethodProfile where
     }
 
 makeLenses ''ApiMethodProfile
-
+-}

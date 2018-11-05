@@ -12,13 +12,13 @@ import           Data.Aeson.Types           (Options (..), SumEncoding (..),
 import           Data.ByteString            (ByteString)
 import qualified Data.ByteString.Lazy.Char8 as LBS
 import           Data.Default               (Default, def)
-import           Data.HashMap.Strict        (HashMap)
 import qualified Data.HashMap.Strict        as SHM
 import           Data.Text                  (Text)
 import qualified Data.Text                  as T
 import           Network.AWS.DynamoDB       (AttributeValue)
 import           Protolude
-import           Qi.Config.Identifier
+import           Qi.Config.AWS.Lambda       (Lambda)
+import           Qi.Config.Types
 
 
 type CwLambdaProgram effs = CwEvent -> Eff effs LBS.ByteString
@@ -26,12 +26,12 @@ type CwLambdaProgram effs = CwEvent -> Eff effs LBS.ByteString
 data CwEventsRule = CwEventsRule {
     _cerName    :: Text
   , _cerProfile :: CwEventsRuleProfile
-  , _cerLbdId   :: LambdaId
+  , _cerLbdId   :: Id Lambda
   }
   deriving (Eq, Show)
 
 data CwConfig = CwConfig {
-    _ccRules :: HashMap CwEventsRuleId CwEventsRule
+    _ccRules :: ResourceIdMap CwEventsRule
   }
   deriving (Eq, Show)
 

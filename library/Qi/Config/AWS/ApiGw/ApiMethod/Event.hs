@@ -3,7 +3,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Qi.Config.AWS.ApiGw.ApiMethod.Event where
-
+{-
 import           Data.Aeson
 import           Data.Aeson.Types
 import           Protolude
@@ -32,4 +32,4 @@ parse _ = withObject "ApiMethodEvent" eventObjectParser
         bodyParser = jsonParser <|> plainTextParser <|> pure EmptyBody
         jsonParser = JsonBody <$> o .: "body-json"
         plainTextParser = PlainTextBody <$> o .: "body-plaintext"
-
+-}

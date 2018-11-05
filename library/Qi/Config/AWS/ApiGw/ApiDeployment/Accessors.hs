@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Qi.Config.AWS.ApiGw.ApiDeployment.Accessors where
-
+{-
 
 import           Control.Lens
 import           Data.Char            (isAlphaNum)
@@ -20,5 +20,5 @@ getLogicalName
   -> Text
 getLogicalName api = T.concat [api^.aName, "ApiDeployment"]
 
-
+-}
 

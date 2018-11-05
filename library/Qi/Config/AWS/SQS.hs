@@ -5,13 +5,11 @@
 module Qi.Config.AWS.SQS where
 
 import           Control.Lens
-import           Data.ByteString      (ByteString)
-import           Data.Default         (Default, def)
-import           Data.HashMap.Strict  (HashMap)
-import qualified Data.HashMap.Strict  as SHM
-import           GHC.Show             (Show (..))
+import           Data.Default        (Default, def)
+import qualified Data.HashMap.Strict as SHM
+import           GHC.Show            (Show (..))
 import           Protolude
-import           Qi.Config.Identifier
+import           Qi.Config.Types
 
 
 data SqsQueue = SqsQueue {
@@ -20,7 +18,7 @@ data SqsQueue = SqsQueue {
   deriving (Eq, Show)
 
 data SqsConfig = SqsConfig {
-    _sqsQueues :: HashMap SqsQueueId SqsQueue
+    _sqsQueues :: ResourceIdMap SqsQueue
   }
   deriving (Eq, Show)
 

@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Qi.Config.AWS.ApiGw.ApiResource.Accessors where
-
+{-
 import           Control.Lens
 import qualified Data.HashMap.Strict  as SHM
 import           Protolude
@@ -19,4 +19,4 @@ getChildren rid config = SHM.lookupDefault [] rid $ config^.apiGwConfig.acApiRes
 
 
 
-
+-}

@@ -28,7 +28,6 @@ import           Qi.Config.AWS.DDB                    (DdbStreamEvent)
 import           Qi.Config.AWS.S3                     (S3Event)
 import           Qi.Config.Identifier
 import           Qi.Program.Gen.Lang
-import           Qi.Program.Gen.Lang
 import           Qi.Program.S3.Lang                   (S3Eff, S3LambdaProgram)
 import           Stratosphere
 
@@ -98,6 +97,8 @@ instance Show Lambda where
   show S3BucketLambda{} = "S3BucketLambda"
   show CfCustomLambda{} = "CfCustomLambda"
   show CwEventLambda{}  = "CwEventLambda"
+
+type LambdaId = Id Lambda
 
 data LambdaPermission
 

@@ -9,23 +9,15 @@
 
 module Qi.Config.AWS.CfCustomResource.Types where
 
-import           Control.Lens               hiding (view, (.=))
-import           Control.Monad.Fail         (fail)
-import           Data.Aeson                 hiding (Result)
-import           Data.Aeson.Types           (fieldLabelModifier, typeMismatch)
-import qualified Data.ByteString.Char8      as BS
-import qualified Data.ByteString.Lazy.Char8 as LBS
-import qualified Data.HashMap.Strict        as SHM
-import qualified Data.Text                  as T
+import           Control.Lens       hiding (view, (.=))
+import           Control.Monad.Fail (fail)
+import           Data.Aeson         hiding (Result)
+import           Data.Aeson.Types   (fieldLabelModifier)
 import           GHC.Generics
-
-import           Network.HTTP.Client        (Request (..), RequestBody (..),
-                                             parseRequest_)
-import           Network.HTTP.Client.TLS    (tlsManagerSettings)
 import           Protolude
 import           Qi.AWS.CF
 import           Qi.AWS.Types
-import           Qi.Config.AWS.CF
+{- import           Qi.Config.AWS.CF -}
 
 
 -- TODO: fix this sum data type

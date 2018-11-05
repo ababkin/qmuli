@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Qi.Config.AWS.ApiGw.ApiMethod.Accessors where
-
+{-
 import           Control.Lens
 import           Data.Char            (isAlphaNum)
 import qualified Data.HashMap.Strict  as SHM
@@ -21,4 +21,4 @@ getLogicalName
   -> Text
 getLogicalName apir verb = T.concat [makeAlphaNumeric $ apir^.arName, T.pack $ show verb]
 
-
+-}

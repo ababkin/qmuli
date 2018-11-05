@@ -25,7 +25,6 @@ import           Qi.Config.AWS.DDB
 import           Qi.Config.AWS.Lambda
 import           Qi.Config.AWS.S3
 import           Qi.Config.AWS.SQS
-import           Qi.Config.Identifier
 import           Qi.Config.Types
 
 
@@ -98,7 +97,7 @@ instance Show (PhysicalName r) where
   show (PhysicalName ln) = toS ln
 
 
-class (Eq rid, Show rid, Hashable rid) => CfResource r rid | rid -> r, r -> rid where
+class (Eq (Id r), Show (Id r), Hashable (Id r)) => CfResource r where
 
   rNameSuffix
     :: r
@@ -109,11 +108,11 @@ class (Eq rid, Show rid, Hashable rid) => CfResource r rid | rid -> r, r -> rid 
     -> Text
   getMap
     :: Config
-    -> SHM.HashMap rid r
+    -> SHM.HashMap (Id r) r
 
   getAllWithIds
     :: Config
-    -> [(rid, r)]
+    -> [(Id r, r)]
   getAllWithIds = SHM.toList . getMap
 
   getAll
@@ -122,9 +121,9 @@ class (Eq rid, Show rid, Hashable rid) => CfResource r rid | rid -> r, r -> rid 
   getAll = SHM.elems . getMap
 
   getById
-    :: (Show rid, Eq rid, Hashable rid)
+    :: (Show (Id r), Eq (Id r), Hashable (Id r))
     => Config
-    -> rid
+    -> (Id r)
     -> r
   getById config rid =
     fromMaybe
@@ -147,36 +146,36 @@ class (Eq rid, Show rid, Hashable rid) => CfResource r rid | rid -> r, r -> rid 
 
   getLogicalNameFromId
     :: Config
-    -> rid
+    -> (Id r)
     -> LogicalName r
   getLogicalNameFromId config rid =
     getLogicalName config $ getById config rid
 
-instance CfResource CwEventsRule CwEventsRuleId where
+instance CfResource CwEventsRule where
   rNameSuffix = const "CwEventsRule"
   getName _ = (^. cerName)
   getMap = (^. cwConfig . ccRules)
 
 
-instance CfResource Lambda LambdaId where
+instance CfResource Lambda where
   rNameSuffix = const "Lambda"
   getName _ = (^. lbdName)
   getMap = (^. lbdConfig . lbdIdToLambda)
 
 
-instance CfResource CfCustomResource CfCustomResourceId where
+instance CfResource CfCustomResource where
   rNameSuffix = const "CfCustomResource"
   getName config = unLogicalName . getLogicalNameFromId config . (^. cLbdId)
   getMap = (^. cfConfig . cfcCustomResources)
 
 
-instance CfResource DdbTable DdbTableId where
+instance CfResource DdbTable where
   rNameSuffix = const "DynamoDBTable"
   getName _ = (^. dtName)
   getMap = (^. ddbConfig . dcTables)
 
 
-instance CfResource S3Bucket S3BucketId where
+instance CfResource S3Bucket where
   rNameSuffix = const "S3Bucket"
   getName _ = (^. s3bName)
   getMap = (^. s3Config . s3IdToBucket)
@@ -184,24 +183,24 @@ instance CfResource S3Bucket S3BucketId where
     PhysicalName $ makeAlphaNumeric (getName config r) `dotNamePrefixWith` config
 
 
-instance CfResource Api ApiId where
+instance CfResource Api where
   rNameSuffix = const "Api"
   getName _ = (^. aName)
   getMap = (^. apiGwConfig . acApis)
 
 
-instance CfResource ApiAuthorizer ApiAuthorizerId where
+instance CfResource ApiAuthorizer where
   rNameSuffix = const "ApiAuthorizer"
   getName _ = (^. aaName)
   getMap = (^. apiGwConfig . acApiAuthorizers)
 
 
-instance CfResource ApiResource ApiResourceId where
+instance CfResource ApiResource where
   rNameSuffix = const "ApiResource"
   getName _ = (^. arName)
   getMap = (^. apiGwConfig . acApiResources)
 
-instance CfResource SqsQueue SqsQueueId where
+instance CfResource SqsQueue where
   rNameSuffix = const "SqsQueue"
   getName _ = (^. sqsQueueName)
   getMap = (^. sqsConfig . sqsQueues)

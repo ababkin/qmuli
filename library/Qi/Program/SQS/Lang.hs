@@ -17,7 +17,6 @@ import           Network.AWS.SQS
 import           Protolude
 import           Qi.AWS.SQS
 import           Qi.Config.AWS.SQS
-import           Qi.Config.Identifier
 import           Qi.Core.Curry
 import           Qi.Program.Gen.Lang
 

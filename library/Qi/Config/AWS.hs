@@ -1,8 +1,10 @@
+{-# LANGUAGE DataKinds              #-}
 {-# LANGUAGE FlexibleContexts       #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses  #-}
 {-# LANGUAGE OverloadedStrings      #-}
 {-# LANGUAGE TemplateHaskell        #-}
+{-# LANGUAGE TypeFamilies           #-}
 
 module Qi.Config.AWS where
 
@@ -97,34 +99,38 @@ instance Show (PhysicalName r) where
   show (PhysicalName ln) = toS ln
 
 
-class (Eq (Id r), Show (Id r), Hashable (Id r)) => CfResource r where
+class (Eq (Id r), Show (Id r), Hashable (Id r)) => Configurable r where
+
+  type Resource :: *
 
   rNameSuffix
-    :: r
+    :: Resource
     -> Text
+
   getName
     :: Config
-    -> r
+    -> Resource
     -> Text
+
   getMap
     :: Config
-    -> SHM.HashMap (Id r) r
+    -> ResourceIdMap r
 
   getAllWithIds
     :: Config
-    -> [(Id r, r)]
+    -> [(Id r, Resource)]
   getAllWithIds = SHM.toList . getMap
 
   getAll
     :: Config
-    -> [r]
+    -> [Resource]
   getAll = SHM.elems . getMap
 
   getById
     :: (Show (Id r), Eq (Id r), Hashable (Id r))
     => Config
-    -> (Id r)
-    -> r
+    -> Id r
+    -> Resource
   getById config rid =
     fromMaybe
       (panic $ "Could not reference resource with id: " <> P.show rid)
@@ -132,14 +138,14 @@ class (Eq (Id r), Show (Id r), Hashable (Id r)) => CfResource r where
 
   getLogicalName
     :: Config
-    -> r
+    -> Resource
     -> LogicalName r
   getLogicalName config r =
     LogicalName $ T.concat [makeAlphaNumeric (getName config r), rNameSuffix r]
 
   getPhysicalName
     :: Config
-    -> r
+    -> Resource
     -> PhysicalName r
   getPhysicalName config r =
     PhysicalName $ makeAlphaNumeric (getName config r) `underscoreNamePrefixWith` config
@@ -151,31 +157,35 @@ class (Eq (Id r), Show (Id r), Hashable (Id r)) => CfResource r where
   getLogicalNameFromId config rid =
     getLogicalName config $ getById config rid
 
-instance CfResource CwEventsRule where
+instance Configurable 'CwEventsRule where
+  type Resource = Lambda
+
   rNameSuffix = const "CwEventsRule"
   getName _ = (^. cerName)
   getMap = (^. cwConfig . ccRules)
 
 
-instance CfResource Lambda where
+instance Configurable 'Lambda where
+  type Resource = Lambda
+
   rNameSuffix = const "Lambda"
   getName _ = (^. lbdName)
   getMap = (^. lbdConfig . lbdIdToLambda)
 
 
-instance CfResource CfCustomResource where
+instance Configurable 'CfCustomResource where
   rNameSuffix = const "CfCustomResource"
   getName config = unLogicalName . getLogicalNameFromId config . (^. cLbdId)
   getMap = (^. cfConfig . cfcCustomResources)
 
 
-instance CfResource DdbTable where
+instance Configurable 'DdbTable where
   rNameSuffix = const "DynamoDBTable"
   getName _ = (^. dtName)
   getMap = (^. ddbConfig . dcTables)
 
 
-instance CfResource S3Bucket where
+instance Configurable 'S3Bucket where
   rNameSuffix = const "S3Bucket"
   getName _ = (^. s3bName)
   getMap = (^. s3Config . s3IdToBucket)
@@ -183,24 +193,24 @@ instance CfResource S3Bucket where
     PhysicalName $ makeAlphaNumeric (getName config r) `dotNamePrefixWith` config
 
 
-instance CfResource Api where
+instance Configurable 'Api where
   rNameSuffix = const "Api"
   getName _ = (^. aName)
   getMap = (^. apiGwConfig . acApis)
 
 
-instance CfResource ApiAuthorizer where
-  rNameSuffix = const "ApiAuthorizer"
-  getName _ = (^. aaName)
-  getMap = (^. apiGwConfig . acApiAuthorizers)
+{- instance Configurable 'ApiAuthorizer where -}
+  {- rNameSuffix = const "ApiAuthorizer" -}
+  {- getName _ = (^. aaName) -}
+  {- getMap = (^. apiGwConfig . acApiAuthorizers) -}
 
 
-instance CfResource ApiResource where
-  rNameSuffix = const "ApiResource"
-  getName _ = (^. arName)
-  getMap = (^. apiGwConfig . acApiResources)
+{- instance Configurable 'ApiResource where -}
+  {- rNameSuffix = const "ApiResource" -}
+  {- getName _ = (^. arName) -}
+  {- getMap = (^. apiGwConfig . acApiResources) -}
 
-instance CfResource SqsQueue where
+instance Configurable 'SqsQueue where
   rNameSuffix = const "SqsQueue"
   getName _ = (^. sqsQueueName)
   getMap = (^. sqsConfig . sqsQueues)

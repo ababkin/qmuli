@@ -7,7 +7,7 @@
 {-# LANGUAGE ScopedTypeVariables       #-}
 {-# LANGUAGE TemplateHaskell           #-}
 
-module Qi.Config.AWS.Lambda where
+module Qi.Config.Resource.Lambda where
 
 import           Control.Lens
 import           Control.Monad.Freer
@@ -25,25 +25,11 @@ import           Qi.Config.AWS.CfCustomResource       (CfCustomResourceLambdaPro
 import           Qi.Config.AWS.CfCustomResource.Types (CfCustomResourceEvent)
 import           Qi.Config.AWS.CW                     (CwEvent, CwLambdaProgram)
 import           Qi.Config.AWS.DDB                    (DdbStreamEvent)
-import           Qi.Config.AWS.S3                     (S3Event)
 import           Qi.Config.Identifier
+import           Qi.Config.Resource.S3                (S3Event)
 import           Qi.Program.Gen.Lang
 import           Qi.Program.S3.Lang                   (S3Eff, S3LambdaProgram)
 import           Stratosphere
-
-
-data LambdaConfig = LambdaConfig {
-    _lbdIdToLambda :: HashMap LambdaId Lambda
-  , _lbdNameToId   :: HashMap Text LambdaId
-  }
-  deriving (Eq, Show)
-instance Default LambdaConfig where
-  def = LambdaConfig {
-    _lbdIdToLambda  = SHM.empty
-  , _lbdNameToId    = SHM.empty
-  }
-
-
 
 
 --type ApiLambdaProgram effs              = ApiMethodEvent        -> Eff effs LBS.ByteString
@@ -98,7 +84,7 @@ instance Show Lambda where
   show CfCustomLambda{} = "CfCustomLambda"
   show CwEventLambda{}  = "CwEventLambda"
 
-type LambdaId = Id Lambda
+type LambdaId = Id 'Lambda
 
 data LambdaPermission
 
@@ -159,6 +145,4 @@ instance Default LambdaProfile where
 
 
 makeLenses ''Lambda
-makeLenses ''LambdaConfig
 makeLenses ''LambdaProfile
-

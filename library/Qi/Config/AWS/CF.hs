@@ -1,3 +1,4 @@
+{-# LANGUAGE DataKinds         #-}
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE NamedFieldPuns    #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -6,21 +7,21 @@
 module Qi.Config.AWS.CF where
 
 import           Control.Lens
-import           Control.Monad.Fail   (fail)
+import           Control.Monad.Fail        (fail)
 import           Data.Aeson
-import           Data.Aeson.Types     (Options (..), SumEncoding (..),
-                                       fieldLabelModifier, typeMismatch)
-import           Data.ByteString      (ByteString)
-import           Data.Default         (Default, def)
+import           Data.Aeson.Types          (Options (..), SumEncoding (..),
+                                            fieldLabelModifier, typeMismatch)
+import           Data.ByteString           (ByteString)
+import           Data.Default              (Default, def)
 import           Data.Hashable
-import           Data.HashMap.Strict  (HashMap)
-import qualified Data.HashMap.Strict  as SHM
-import           Data.Text            (Text)
-import qualified Data.Text            as T
+import           Data.HashMap.Strict       (HashMap)
+import qualified Data.HashMap.Strict       as SHM
+import           Data.Text                 (Text)
+import qualified Data.Text                 as T
 import           GHC.Generics
 import           Protolude
 import           Qi.AWS.Types
-import           Qi.Config.AWS.Lambda (Lambda)
+import           Qi.Config.Resource.Lambda
 import           Qi.Config.Types
 
 

@@ -17,7 +17,7 @@ import           Data.Text                  (Text)
 import qualified Data.Text                  as T
 import           Network.AWS.DynamoDB       (AttributeValue)
 import           Protolude
-import           Qi.Config.AWS.Lambda       (Lambda)
+{- import           Qi.Config.Resource.Lambda  (Lambda) -}
 import           Qi.Config.Types
 
 

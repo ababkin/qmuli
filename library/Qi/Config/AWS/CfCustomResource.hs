@@ -28,8 +28,8 @@ import           Network.HTTP.Client.TLS              (tlsManagerSettings)
 import           Protolude
 import           Qi.AWS.CF
 import           Qi.AWS.Types
-import           Qi.Config.AWS.CF
 import           Qi.Config.AWS.CfCustomResource.Types
+{- import           Qi.Config.Resource.CF -}
 import           Qi.Program.Gen.Lang                  (amazonka, http, say)
 
 

@@ -103,6 +103,8 @@ library:
     - Qi.AWS.Lex
     - Qi.AWS.Types
     - Qi.CLI.Dispatcher
+    - Qi.Config.S3
+    - Qi.Config.Lambda
     - Qi.Config.AWS
     - Qi.Config.AWS.ApiGw
     - Qi.Config.AWS.ApiGw.ApiMethod.Profile
@@ -110,8 +112,8 @@ library:
     - Qi.Config.AWS.CF
     - Qi.Config.AWS.CW
     - Qi.Config.AWS.DDB
-    - Qi.Config.AWS.Lambda
-    - Qi.Config.AWS.S3
+    - Qi.Config.Resource.Lambda
+    - Qi.Config.Resource.S3
     - Qi.Config.CfTemplate
     - Qi.Config.Types
     - Qi.Core.Curry

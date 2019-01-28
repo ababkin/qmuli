@@ -7,10 +7,11 @@ module Qi.Config.CfTemplate (render) where
 import qualified Data.ByteString.Lazy    as LBS
 import           Protolude
 import           Qi.Config.AWS
-import qualified Qi.Config.Render.ApiGw  as ApiGw
+{- import qualified Qi.Config.Render.ApiGw  as ApiGw -}
 import qualified Qi.Config.Render.CF     as CF
 import qualified Qi.Config.Render.CW     as CW
 import qualified Qi.Config.Render.DDB    as DDB
+import qualified Qi.Config.Render.KF     as KF
 import qualified Qi.Config.Render.Lambda as Lambda
 import qualified Qi.Config.Render.Role   as Role
 import qualified Qi.Config.Render.S3     as S3
@@ -31,21 +32,23 @@ render config = encodeTemplate $
 toResources
   :: Config
   -> Resources
-toResources config = mconcat [
-    S3.toResources config
-  , Role.toResources config
-  , Lambda.toResources config
-  {- , ApiGw.toResources config -}
-  , DDB.toResources config
-  , SQS.toResources config
-  , CF.toResources config
-  , CW.toResources config
+toResources config = mconcat $ ($ config) <$>
+  [ S3.toResources
+  , Role.toResources
+  , Lambda.toResources
+  {- , ApiGw.toResources -}
+  , DDB.toResources
+  , SQS.toResources
+  , CF.toResources
+  , CW.toResources
+  , KF.toResources
   ]
 
 toOutputs
   :: Config
   -> Outputs
-toOutputs config = mconcat [
-    {- ApiGw.toOutputs config -}
-    CF.toOutputs config
+toOutputs config = mconcat $ ($ config) <$>
+  [
+    {- ApiGw.toOutputs -}
+    CF.toOutputs
   ]

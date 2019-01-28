@@ -21,6 +21,7 @@ import           Qi.Config.AWS.ApiGw
 import           Qi.Config.AWS.CF
 import           Qi.Config.AWS.CW
 import           Qi.Config.AWS.DDB
+import           Qi.Config.AWS.KF
 import           Qi.Config.AWS.Lambda
 import           Qi.Config.AWS.S3
 import           Qi.Config.AWS.SQS
@@ -38,6 +39,7 @@ data Config = Config {
   , _cfConfig     :: CfConfig
   , _cwConfig     :: CwConfig
   , _sqsConfig    :: SqsConfig
+  , _kfConfig     :: KfConfig
 }
   deriving (Eq, Show)
 
@@ -53,6 +55,7 @@ instance Default Config where
     , _cfConfig     = def
     , _cwConfig     = def
     , _sqsConfig    = def
+    , _kfConfig    = def
   }
 
 makeLenses ''Config
@@ -150,6 +153,16 @@ class (Eq rid, Show rid, Hashable rid) => CfResource r rid | rid -> r, r -> rid 
   getLogicalNameFromId config rid =
     getLogicalName config $ getById config rid
 
+  {- class Conv a b where -}
+    {- conv :: Config -> a -> b -}
+
+    {- instance Conv rid r where -}
+      {- conv = getById -}
+
+    {- instance Conv rid (PhysicalName r) where -}
+      {- conv config = getPhysicalName config . getById config -}
+
+
 instance CfResource CwEventsRule CwEventsRuleId where
   rNameSuffix = const "CwEventsRule"
   getName _ = (^. cerName)
@@ -206,6 +219,13 @@ instance CfResource SqsQueue SqsQueueId where
   getPhysicalName config r =
     PhysicalName $ makeAlphaNumeric (getName config r) `dotNamePrefixWith` config
 
+
+instance CfResource Kf KfId where
+  rNameSuffix = const "Kf"
+  getName _ = (^. kfName)
+  getMap = (^. kfConfig . kfIdToKf)
+  getPhysicalName config r =
+    PhysicalName $ makeAlphaNumeric (getName config r) `dotNamePrefixWith` config
 
 
 

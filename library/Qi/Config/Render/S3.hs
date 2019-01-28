@@ -34,7 +34,7 @@ toResources config = Resources $ toResource <$> buckets
   where
     buckets = filter (\s3b -> s3b ^. s3bProfile . s3bpExistence /= AlreadyExists) $ getAll config
 
-    toResource bucket@S3Bucket{_s3bEventConfigs} = (
+    toResource bucket = (
       S.resource (unLogicalName lname) $
         S3BucketProperties $ S.s3Bucket
           & S.sbBucketName    ?~ Literal (unPhysicalName bucketName)

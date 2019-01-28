@@ -8,7 +8,6 @@ module Qi.Config.AWS.S3 where
 
 import           Control.Lens
 import           Data.Aeson           (FromJSON, ToJSON)
-import           Data.ByteString      (ByteString)
 import           Data.Default         (Default, def)
 import           Data.HashMap.Strict  (HashMap)
 import qualified Data.HashMap.Strict  as SHM

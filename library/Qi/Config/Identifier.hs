@@ -54,3 +54,7 @@ instance FromInt CfCustomResourceId where
 newtype CwEventsRuleId = CwEventsRuleId Int deriving (Eq, Show, Hashable, Generic, ToJSON, FromJSON)
 instance FromInt CwEventsRuleId where
   fromInt = CwEventsRuleId
+
+newtype KfId = KfId Int deriving (Eq, Show, Hashable, Generic, ToJSON, FromJSON)
+instance FromInt KfId where
+  fromInt = KfId
